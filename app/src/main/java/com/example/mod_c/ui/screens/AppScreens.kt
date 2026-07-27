@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -31,6 +32,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -42,9 +44,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -175,6 +180,7 @@ fun PreviewLoginScreen(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfilScreen(
+    preferences: AppPreferences,
     onVoltar: () -> Unit,
     onHome: () -> Unit,
     onExercise: () -> Unit,
@@ -260,8 +266,36 @@ fun PerfilScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(pad)
+                .padding(pad),
+            horizontalAlignment = Alignment.CenterHorizontally
         ){
+            Box(
+                modifier = Modifier
+                    .border(1.dp,Color.Gray),
+                contentAlignment = Alignment.Center
+
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        imageVector = Icons.Default.AccountCircle, // inserir imagem aqui
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(48.dp),
+                        contentScale = ContentScale.Crop
+                    )
+                    Text("Nome de usuário", style =  MaterialTheme.typography.headlineSmall)
+                    Text("email",style =  MaterialTheme.typography.bodyLarge) //inserir email aqui
+                    Text("Nivel",style =  MaterialTheme.typography.bodyMedium) // inserir data de nascimento aqui
+                }
+
+                Box(){
+
+                }
+            }
 
         }
     }
@@ -277,6 +311,7 @@ fun PreviewPerfilScreen(){
         onHome = {},
         onExplore = {},
         onArticles = {},
-        onExercise = {}
+        onExercise = {},
+        preferences = AppPreferences(LocalContext.current)
     )
 }

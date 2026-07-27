@@ -15,16 +15,19 @@ val Context.dataStore by preferencesDataStore("app_preferences")
 class AppPreferences(val context: Context){
     object Keys{
         val splashScreenSeen = booleanPreferencesKey("splash_screen_seen")
+        val darkMode = booleanPreferencesKey("dark_mode")
+        val nofiticationsActive = booleanPreferencesKey("notifications_active")
     }
 
     val state: Flow<AppState> = context.dataStore.data
         .map{ preferences ->
             AppState(
-                splashScreenSeen = preferences[Keys.splashScreenSeen] ?: false
+                splashScreenSeen = preferences[Keys.splashScreenSeen] ?: false,
+                darkMode = preferences[Keys.darkMode] ?: false,
+                notificationsActive = preferences[Keys.nofiticationsActive] ?: false
+
             )
-
         }
-
     suspend fun finishOnboarding(){
         context.dataStore.edit { preferences ->
             preferences[Keys.splashScreenSeen] = true
