@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -21,18 +22,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun PinField(){
     var pin by remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
 
 
     BasicTextField(
+        modifier = Modifier
+            .focusRequester(focusRequester),
         value = pin,
-        onValueChange = {
-            if (pin.length <=4 && pin.all { it.isDigit() }) pin=it
+        onValueChange = { value->
+            focusRequester.requestFocus()
+            if (value.length <= 4 && value.all { it.isDigit() }) pin=value
+
         },
         decorationBox = {
             Row(
@@ -51,7 +58,11 @@ fun PinField(){
                     }
                 }
             }
-        }
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number
+        ),
+
     )
 
 }

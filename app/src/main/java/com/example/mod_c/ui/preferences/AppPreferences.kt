@@ -12,17 +12,22 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 
 val Context.dataStore by preferencesDataStore("app_preferences")
-class AppPreferences(context: Context){
+class AppPreferences(val context: Context){
     object Keys{
         val splashScreenSeen = booleanPreferencesKey("splash_screen_seen")
     }
 
     val state: Flow<AppState> = context.dataStore.data
-        .map{
+        .map{ preferences ->
             AppState(
-                splashScreenSeen = it[Keys.splashScreenSeen] ?: false
+                splashScreenSeen = preferences[Keys.splashScreenSeen] ?: false
             )
 
         }
-    val current = state!!
+
+    suspend fun finishOnboarding(){
+        context.dataStore.edit { preferences ->
+            preferences[Keys.splashScreenSeen] = true
+        }
+    }
 }
