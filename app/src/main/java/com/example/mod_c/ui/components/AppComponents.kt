@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.carousel.HorizontalCenteredHeroCarousel
+import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -25,51 +28,71 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 
 @Composable
-fun PinField(){
+fun PinField() {
     var pin by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
 
-
     BasicTextField(
-        modifier = Modifier
-            .focusRequester(focusRequester),
+        modifier = Modifier.focusRequester(focusRequester),
         value = pin,
         onValueChange = { value->
             focusRequester.requestFocus()
-            if (value.length <= 4 && value.all { it.isDigit() }) pin=value
-
-        },
-        decorationBox = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                repeat(4) { index ->
-                    Box(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .border(1.dp,Color.Gray),
-                        contentAlignment = Alignment.Center
-                    ){
-                        Text(
-                            text = pin.getOrNull(index)?.toString() ?: ""
-                        )
-                    }
-                }
+            value.filter { it.isDigit() }
+            if (value.length <= 4 ){
+                pin = value
             }
         },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number
-        ),
+        )
 
-    )
+    ){
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            repeat(4){ index->
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(1.dp,Color.Gray),
+                    contentAlignment = Alignment.Center
 
+                ){
+                    Text(
+                        text = if (index < pin.length) pin[index].toString() else ""
+                    )
+                }
+            }
+        }
+    }
 }
+
+
 
 @Preview
 @Composable
 fun PreviewPinField(){
     PinField()
 
+}
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Carousel(){
+    HorizontalCenteredHeroCarousel(
+        state =
+
+    )
+
+}
+
+@Composable
+@Preview
+fun PreviewCarousel(){
+    Carousel()
 }

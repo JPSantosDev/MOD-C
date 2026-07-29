@@ -16,7 +16,8 @@ class AppPreferences(val context: Context){
     object Keys{
         val splashScreenSeen = booleanPreferencesKey("splash_screen_seen")
         val darkMode = booleanPreferencesKey("dark_mode")
-        val nofiticationsActive = booleanPreferencesKey("notifications_active")
+        val highContrast = booleanPreferencesKey("high_contrast")
+        val notificationsActive = booleanPreferencesKey("notifications_active")
     }
 
     val state: Flow<AppState> = context.dataStore.data
@@ -24,7 +25,9 @@ class AppPreferences(val context: Context){
             AppState(
                 splashScreenSeen = preferences[Keys.splashScreenSeen] ?: false,
                 darkMode = preferences[Keys.darkMode] ?: false,
-                notificationsActive = preferences[Keys.nofiticationsActive] ?: false
+                notificationsActive = preferences[Keys.notificationsActive] ?: false,
+                highContrast = preferences[Keys.highContrast] ?: false
+
 
             )
         }
@@ -33,4 +36,23 @@ class AppPreferences(val context: Context){
             preferences[Keys.splashScreenSeen] = true
         }
     }
+    suspend fun alterDarkMode(){
+        context.dataStore.edit { preferences ->
+            val currentState = preferences[Keys.darkMode] ?: false
+            preferences[Keys.darkMode] = !currentState
+        }
+    }
+    suspend fun alterNotifications(){
+        context.dataStore.edit { preferences ->
+            val currentState = preferences[Keys.notificationsActive] ?: false
+            preferences[Keys.notificationsActive] = !currentState
+        }
+    }
+    suspend fun alterContrast(){
+        context.dataStore.edit { preferences ->
+            val currentState = preferences[Keys.highContrast] ?: false
+            preferences[Keys.highContrast] = !currentState
+        }
+    }
+
 }
